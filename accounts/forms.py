@@ -5,8 +5,14 @@ from accounts.validators import validate_email_format, validate_phone_format
 
 
 class RegistrationForm(forms.ModelForm):
-    password1: forms.CharField = forms.CharField(widget=forms.PasswordInput)
-    password2: forms.CharField = forms.CharField(widget=forms.PasswordInput)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs["class"] = "form-control"
+        self.fields["role"].widget.attrs["class"] = "form-select"
+
+    password1: forms.CharField = forms.CharField(widget=forms.PasswordInput(attrs={"class": "form-control"}))
+    password2: forms.CharField = forms.CharField(widget=forms.PasswordInput(attrs={"class": "form-control"}))
 
     class Meta:
         model: type[User] = User
@@ -49,5 +55,5 @@ class RegistrationForm(forms.ModelForm):
 
 
 class LoginForm(forms.Form):
-    email: forms.EmailField = forms.EmailField()
-    password: forms.CharField = forms.CharField(widget=forms.PasswordInput)
+    email: forms.EmailField = forms.EmailField(widget=forms.EmailInput(attrs={"class": "form-control"}))
+    password: forms.CharField = forms.CharField(widget=forms.PasswordInput(attrs={"class": "form-control"}))

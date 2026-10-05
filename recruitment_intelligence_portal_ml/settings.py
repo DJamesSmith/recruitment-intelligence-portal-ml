@@ -22,10 +22,11 @@ INSTALLED_APPS = [
 
     # Third-party
     'rest_framework',
-    'corsheaders',
+    # 'corsheaders',
 
     # Local apps
     'accounts',
+    'recruitments',
 ]
 
 MIDDLEWARE = [
@@ -89,14 +90,43 @@ USE_I18N = True
 USE_TZ = True
 
 
-STATIC_URL = 'static/'
+STATIC_URL = "/static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
+STATICFILES_DIRS  = [BASE_DIR / "static"]
 
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
 
 MAILERS = {
     'default': {
         'BACKEND': 'django.core.mail.backends.console.EmailBackend',
     },
 }
+
+AUTH_USER_MODEL: str = "accounts.User"
+AUTHENTICATION_BACKENDS: list[str] = [
+    "accounts.backends.EmailBackend",
+    "django.contrib.auth.backends.ModelBackend",
+]
+
+
+REST_FRAMEWORK: dict[str, object] = {
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
+    ),
+    "DEFAULT_PERMISSION_CLASSES": (
+        "rest_framework.permissions.IsAuthenticated",
+    ),
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "PAGE_SIZE": 10,
+}
+
+JWT_ACCESS_TOKEN_MINUTES=30
+JWT_REFRESH_TOKEN_DAYS=1
+
+SESSION_COOKIE_SECURE=False
+CSRF_COOKIE_SECURE=False
 
 # NOTE:
 # psql -U django_user -d recruitment_intelli_db

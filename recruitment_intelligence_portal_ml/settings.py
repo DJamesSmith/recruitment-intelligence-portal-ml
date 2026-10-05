@@ -56,7 +56,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'recruitment_intelligence_portal_ml.wsgi.application'
 
-
 DATABASES = {
     "default": {
         "ENGINE":   "django.db.backends.postgresql",

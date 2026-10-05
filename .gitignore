@@ -1,0 +1,98 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environments
+venv/
+env/
+ENV/
+.venv/
+env.bak/
+venv.bak/
+
+# Django
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+media/
+staticfiles/
+static_root/
+
+# Keep sample media
+!media/samples/
+!media/samples/**
+
+# Environment / Secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets.json
+
+# Celery / Redis
+celerybeat-schedule
+celerybeat.pid
+*.rdb
+dump.rdb
+
+# ML / DL Artifacts
+*.h5
+*.keras
+*.joblib
+*.pkl
+models_saved/
+logs/
+mlruns/
+.ipynb_checkpoints/
+
+# Datasets (keep sample only)
+datasets/*.csv
+datasets/*.xlsx
+!datasets/candidates_sample.csv
+!datasets/resumes/
+!datasets/resumes/**
+
+# Testing / Coverage
+.coverage
+.coverage.*
+htmlcov/
+.pytest_cache/
+.tox/
+.nox/
+
+# IDE / Editor
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Postman / Swagger dumps
+postman/
+*.postman_environment.json

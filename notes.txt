@@ -1,0 +1,27 @@
+1. Use the code below for .env
+
+
+DB_NAME=recruitment_intelli_db
+DB_PASSWORD=django_user123
+DB_USER=django_user
+DB_HOST=localhost
+DB_PORT=5432
+
+SECRET_KEY='django-insecure-11ra$a#%esqh(qnx^cto8o(x*%y*(kszn52ju)**o23@76_s+7'
+
+
+------------------------------------------------------------------------
+2. Install all libraries required for this project:
+python -m pip install djangorestframework PyJWT djangorestframework-simplejwt psycopg2-binary celery redis pandas matplotlib scikit-learn nltk tensorflow openpyxl Pillow python-dotenv drf-spectacular
+
+openpyxl is ised for Excel .xlsx file processing
+drf-spectacular is used for swagger documentation
+
+------------------------------------------------------------------------
+
+
+
+------------------------------------------------------------------------
+
+
+------------------------------------------------------------------------

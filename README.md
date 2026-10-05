@@ -20,6 +20,8 @@ An intelligent recruitment management platform built with **Python, Django 5, Po
 * [Deliverables](#deliverables)
 * [Important Implementation Notes](#important-implementation-notes)
 
+<img src="assets/candidates.png" alt="Candidates Page" width="800">
+
 ## Project Overview
 
 Recruitment teams receive large volumes of candidate applications in CSV and Excel files, alongside resumes, portfolio links, and other candidate information. Manually validating these records, assessing skills, shortlisting candidates, and coordinating interviews can be time-consuming.

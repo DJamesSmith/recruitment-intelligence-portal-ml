@@ -1,0 +1,6 @@
+<h1>Recruitment Dashboard</h1>
+<p>Total candidates: {{ summary.total }}</p>
+<p>Average salary: {{ summary.average_salary }}</p>
+{% for item in statuses %}
+    <p>{{ item.screening_status }}: {{ item.count }}</p>
+{% endfor %}

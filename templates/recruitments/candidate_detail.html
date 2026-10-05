@@ -1,0 +1,5 @@
+<h1>{{ candidate.name }}</h1>
+<p>{{ candidate.email }}</p>
+<p>{{ candidate.applied_role }}</p>
+<p>{{ candidate.screening_status }}</p>
+<a href="{% url 'candidate_update' candidate.pk %}">Edit</a>

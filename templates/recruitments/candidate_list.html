@@ -1,0 +1,7 @@
+<h1>Candidates</h1>
+<a href="{% url 'candidate_create' %}">Add Candidate</a>
+{% for candidate in candidates %}
+    <p><a href="{% url 'candidate_detail' candidate.pk %}">{{ candidate.name }}</a> - {{ candidate.screening_status }}</p>
+{% empty %}
+    <p>No candidates found.</p>
+{% endfor %}

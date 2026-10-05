@@ -146,7 +146,7 @@ The request flow is:
 The following is the intended project structure.
 
 ```text
-recruitment_screening_portal_ml/
+recruitment_intelligence_portal_ml/
 ├── manage.py
 ├── requirements.txt
 ├── .env.example
@@ -155,7 +155,7 @@ recruitment_screening_portal_ml/
 ├── sql_queries.sql
 ├── notes.txt
 │
-├── recruitment_screening_portal_ml/
+├── recruitment_intelligence_portal_ml/
 │   ├── __init__.py
 │   ├── settings.py
 │   ├── urls.py
@@ -302,7 +302,7 @@ recruitment_screening_portal_ml/
 
 **Architecture notes:**
 
-* `config/` is the Django project package. If your project package has a different name, update the paths accordingly.
+* `recruitment_intelligence_portal_ml/` is the Django project package. If your project package has a different name, update the paths accordingly.
 * Each Django app should have its own `migrations/` directory and generated migration files.
 * Keep JavaScript and AJAX logic in `static/js/script.js`, rather than embedding application logic inside templates.
 * Use `services.py` for reusable business logic and keep views focused on HTTP requests and responses.
@@ -464,13 +464,13 @@ The actual page routes depend on the URL configuration implemented in the projec
 Run this in a separate terminal with the virtual environment activated:
 
 ```bash
-celery -A config worker --loglevel=info
+celery -A recruitment_intelligence_portal_ml worker --loglevel=info
 ```
 
 On Windows, if the default multiprocessing pool does not work in your environment, a development-only alternative is:
 
 ```bash
-celery -A config worker --pool=solo --loglevel=info
+celery -A recruitment_intelligence_portal_ml worker --pool=solo --loglevel=info
 ```
 
 ### 4. Verify ingestion and prediction

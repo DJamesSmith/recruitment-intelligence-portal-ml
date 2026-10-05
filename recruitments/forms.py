@@ -4,6 +4,12 @@ from recruitments.models import Candidate
 
 
 class CandidateForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs["class"] = "form-control"
+        self.fields["applied_role"].widget.attrs["class"] = "form-select"
+
     class Meta:
         model: type[Candidate] = Candidate
         fields: list[str] = [

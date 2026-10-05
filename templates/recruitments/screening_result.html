@@ -1,4 +1,18 @@
-<h1>Screening Result</h1>
-<p>Score: {{ result.score }}</p>
-<p>Status: {{ result.status }}</p>
-<p>{{ result.reason }}</p>
+{% extends "base.html" %}
+{% block title %}Screening Result | Recruitment Portal{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-4">
+                <h1 class="h3">Screening Result</h1>
+                <hr>
+                <p><strong>Score:</strong> {{ result.score }}</p>
+                <p><strong>Status:</strong> <span class="badge text-bg-primary">{{ result.status }}</span></p>
+                <p><strong>Reason:</strong><br>{{ result.reason }}</p>
+                <a href="{% url 'candidate_detail' result.candidate.pk %}" class="btn btn-outline-secondary">Back to Candidate</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

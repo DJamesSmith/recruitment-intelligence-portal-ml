@@ -1,8 +1,6 @@
 
 ## Two-Phase Development Plan
 
-This plan defines the files that should be generated incrementally with an LLM. Generate and test one logical group at a time instead of asking the LLM to create the entire project in a single response.
-
 ### Phase 1 — Core Django Platform and Recruitment Workflows
 
 **Objective:** Establish a functioning Django application with PostgreSQL, authentication, candidate management, interviews, file ingestion, and the web/API layers.

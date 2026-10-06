@@ -1,0 +1,388 @@
+
+## Two-Phase Development Plan
+
+This plan defines the files that should be generated incrementally with an LLM. Generate and test one logical group at a time instead of asking the LLM to create the entire project in a single response.
+
+### Phase 1 — Core Django Platform and Recruitment Workflows
+
+**Objective:** Establish a functioning Django application with PostgreSQL, authentication, candidate management, interviews, file ingestion, and the web/API layers.
+
+#### 1. Project foundation and configuration
+
+Generate:
+
+* `config/settings.py`
+* `config/urls.py`
+* `.env.example`
+
+Update `settings.py` to configure:
+
+* Installed Django applications and all six project apps.
+* PostgreSQL database connection through environment variables.
+* Django templates and the global templates directory.
+* Static and media file settings.
+* Authentication model and authentication backends.
+* Django REST Framework defaults.
+* JWT authentication and token lifetimes.
+* Password validation and session security.
+* Middleware, including custom request logging.
+* Email settings for verification or OTP delivery.
+* Time zone, logging, and environment-specific debug settings.
+
+**Important:** `settings.py` must be updated again in Phase 2 when Celery, Redis, API documentation, caching, and any ML-related configuration are integrated.
+
+#### 2. `accounts/` application
+
+Generate:
+
+* `accounts/apps.py`
+* `accounts/models.py`
+* `accounts/admin.py`
+* `accounts/forms.py`
+* `accounts/serializers.py`
+* `accounts/views.py`
+* `accounts/urls.py`
+* `accounts/backends.py`
+* `accounts/permissions.py`
+* `accounts/decorators.py`
+* `accounts/middleware.py`
+* `accounts/signals.py`
+* `accounts/validators.py`
+* `accounts/services.py`
+* `accounts/tests.py`
+
+Implementation scope:
+
+* User registration and login/logout.
+* Admin, HR, and Interviewer roles.
+* Password hashing and user validation.
+* JWT access and refresh token endpoints.
+* Email or OTP verification.
+* Role-based API permissions.
+* Custom authentication backend where necessary.
+* Middleware for request path, method, processing time, and user role.
+* Protection of internal dashboards and secured endpoints.
+* Django Admin customization.
+
+Use a custom user model if required, and define it before the first database migration. Configure `AUTH_USER_MODEL` in `settings.py` before running initial migrations.
+
+
+#### 3. `recruitments/` application
+
+Generate:
+
+* `recruitments/apps.py`
+* `recruitments/models.py`
+* `recruitments/admin.py`
+* `recruitments/forms.py`
+* `recruitments/serializers.py`
+* `recruitments/views.py`
+* `recruitments/urls.py`
+* `recruitments/decorators.py`
+* `recruitments/validators.py`
+* `recruitments/services.py`
+* `recruitments/sql_queries.py`
+* `recruitments/tests.py`
+
+Implementation scope:
+
+* `JobRole`, `Candidate`, `ApplicationBatch`, and `ScreeningResult` models.
+* Candidate creation, listing, detail views, updates, and deletion.
+* Search, filters, ordering, pagination, and JSON responses.
+* Rule-based screening and status management.
+* Dashboard queries and recruitment summaries.
+* ORM operations using `get()`, `filter()`, `exclude()`, ordering, and slicing.
+* Raw SQL examples and safe database access.
+* Model relationships, constraints, and indexes where appropriate.
+
+
+#### 4. `interviews/` application
+
+Generate:
+
+* `interviews/apps.py`
+* `interviews/models.py`
+* `interviews/admin.py`
+* `interviews/forms.py`
+* `interviews/serializers.py`
+* `interviews/views.py`
+* `interviews/urls.py`
+* `interviews/services.py`
+* `interviews/validators.py`
+* `interviews/tests.py`
+
+Implementation scope:
+
+* `InterviewSlot` and `InterviewFeedback` models.
+* Interview scheduling and slot availability.
+* Role-specific interview slot retrieval.
+* Feedback submission and status tracking.
+* Validation to prevent conflicting or invalid bookings.
+* Permission checks for interviewers and HR users.
+* API endpoints for interview management.
+
+#### 5. `ingestion/` application — Initial implementation
+
+Generate:
+
+* `ingestion/apps.py`
+* `ingestion/exceptions.py`
+* `ingestion/validators.py`
+* `ingestion/cleaners.py`
+* `ingestion/parsers.py`
+* `ingestion/processors.py`
+* `ingestion/services.py`
+* `ingestion/views.py`
+* `ingestion/urls.py`
+* `ingestion/serializers.py`
+* `ingestion/tests.py`
+
+Implementation scope:
+
+* CSV and Excel parsing.
+* Required-column validation.
+* Email, phone, and numeric field validation.
+* String normalization and data cleaning.
+* Duplicate detection.
+* Accepted and rejected CSV report generation.
+* Upload forms and file handling.
+* Ingestion batch creation and initial status tracking.
+* Reusable exceptions and safe error reporting.
+
+Background task execution is added in Phase 2.
+
+#### 6. Global web interface and routing
+
+Generate:
+
+* `templates/base.html`
+* `templates/registration/`
+* `templates/accounts/`
+* `templates/recruitments/`
+* `templates/interviews/`
+* `templates/dashboard/`
+* `static/css/style.css`
+* `static/js/script.js`
+
+Implementation scope:
+
+* Login and registration pages.
+* Candidate upload and listing pages.
+* Candidate detail and screening status pages.
+* Interview scheduling and feedback pages.
+* Dashboard and report pages.
+* Django Template Language, URL reversing, redirects, GET/POST handling.
+* AJAX duplicate-email checks and dynamic interview slot retrieval.
+* Correct CSRF handling for AJAX requests.
+* Cookies for the last selected role filter and sessions for the current screening batch.
+* Optional resume and image uploads.
+
+All JavaScript, jQuery, and AJAX logic must remain in `static/js/script.js`. Templates should reference this file through Django's static-file system.
+
+#### 7. Phase 1 integration and verification
+
+Before proceeding, verify:
+
+* Django starts without errors.
+* PostgreSQL connectivity works.
+* Models and migrations are valid.
+* Admin access works.
+* Authentication and role checks work.
+* Candidate CRUD and interview workflows work.
+* CSV/Excel ingestion produces accepted and rejected reports.
+* API serializers validate requests correctly.
+* Template forms, sessions, cookies, AJAX, and CSRF behave correctly.
+
+**Phase 1 completion criterion:** A working recruitment portal that can manage users, candidates, applications, interviews, and synchronous data ingestion.
+
+
+### Phase 2 — Asynchronous Processing, ML, NLP, Deep Learning, and Final Integration
+
+**Objective:** Extend the core portal with background jobs, predictive screening, resume intelligence, model-serving APIs, caching, analytics, and complete assessment documentation.
+
+#### 1. Update project configuration
+
+Update:
+
+* `config/settings.py`
+* `config/celery.py`
+* `config/__init__.py`
+* `config/urls.py`
+* `requirements.txt`
+* `.env.example`
+
+Configure:
+
+* Redis broker and cache settings.
+* Celery serialization, task tracking, and failure handling.
+* Django REST Framework authentication and permission defaults.
+* Swagger/OpenAPI documentation.
+* Email/OTP verification configuration.
+* ML model artifact paths and relevant application settings.
+* Secure media handling and production-sensitive defaults.
+
+#### 2. Complete the `ingestion/` application
+
+Generate or update:
+
+* `ingestion/tasks.py`
+* `ingestion/processors.py`
+* `ingestion/services.py`
+* `ingestion/views.py`
+* `ingestion/serializers.py`
+* `ingestion/tests.py`
+
+Implementation scope:
+
+* Asynchronous CSV/Excel processing with Celery.
+* Task status and progress tracking.
+* Accepted/rejected record reports.
+* Error logging and retry handling where appropriate.
+* Failure states exposed through the database and API.
+* Idempotent processing to prevent duplicate records when tasks are retried.
+
+#### 3. `ml_engine/` module
+
+Generate:
+
+* `ml_engine/__init__.py`
+* `ml_engine/preprocessing.py`
+* `ml_engine/feature_engineering.py`
+* `ml_engine/train.py`
+* `ml_engine/evaluate.py`
+* `ml_engine/predict.py`
+* `ml_engine/model_registry.py`
+* `ml_engine/serializers.py`
+* `ml_engine/views.py`
+* `ml_engine/urls.py`
+* `ml_engine/tasks.py`
+* `ml_engine/tests.py`
+* `ml_engine/artifacts/.gitkeep`
+
+Implementation scope:
+
+* Load cleaned candidate data using Pandas.
+* Handle missing values, duplicates, irrelevant columns, and outliers.
+* Encode categorical features and select useful features.
+* Split data into training and testing sets.
+* Train at least two classifiers, such as Logistic Regression and Random Forest.
+* Evaluate model performance using suitable classification metrics.
+* Visualize relevant results using Matplotlib.
+* Persist the selected trained model and preprocessing artifacts.
+* Load the model safely for repeatable inference.
+* Expose a secured DRF endpoint that returns a prediction and a meaningful probability or score.
+* Integrate model inference into the recruitment screening workflow.
+
+Training and prediction must use the same feature schema and preprocessing transformations. Avoid fitting preprocessing transformations on test data or incoming prediction requests.
+
+#### 4. `nlp_engine/` module
+
+Generate:
+
+* `nlp_engine/__init__.py`
+* `nlp_engine/preprocessing.py`
+* `nlp_engine/tokenization.py`
+* `nlp_engine/vectorization.py`
+* `nlp_engine/pos_tagging.py`
+* `nlp_engine/skill_matching.py`
+* `nlp_engine/resume_analysis.py`
+* `nlp_engine/deep_learning.py`
+* `nlp_engine/tests.py`
+* `nlp_engine/artifacts/.gitkeep`
+
+Implementation scope:
+
+* Resume text cleaning and normalization.
+* NLTK tokenization.
+* Text vectorization.
+* Part-of-speech tagging.
+* Skill-keyword extraction and matching.
+* A numeric skill-match score.
+* A minimal executable TensorFlow/Keras neural network for shortlist or resume-score classification.
+* A clearly documented inference interface for integration with recruitment workflows.
+
+Download the required NLTK resources explicitly and document the setup. The NLP pipeline should handle missing or empty resume text without crashing.
+
+#### 5. Integrate asynchronous jobs and caching
+
+Update:
+
+* `config/celery.py`
+* `config/settings.py`
+* `ingestion/tasks.py`
+* `ml_engine/tasks.py`
+* Relevant recruitment services and views.
+
+Implementation scope:
+
+* Start Celery workers using Redis as the broker.
+* Process large uploads outside the HTTP request lifecycle.
+* Expose task status and progress.
+* Handle task failures without corrupting existing records.
+* Cache top shortlisted candidates by job role.
+* Define a cache invalidation strategy when candidate data or screening results change.
+
+#### 6. Complete database analytics and raw SQL
+
+Generate or finalize:
+
+* `sql_queries.sql`
+* `recruitments/sql_queries.py`
+* Recruitment dashboard services and tests.
+
+Include the assessment's requested examples:
+
+* `SELECT`, `WHERE`, `AND`, `OR`, `LIKE`, `BETWEEN`.
+* `LIMIT` and `ORDER BY`.
+* Aggregate functions and `GROUP BY`/`HAVING`.
+* Candidate/job-role joins, including a full outer join.
+* A natural join where appropriate and supported by the actual schema.
+* `UNION ALL` for selected and waitlisted candidates.
+* `INTERSECT` for candidates matching both Python and Django skills.
+
+Use PostgreSQL-compatible SQL and explain the purpose of each query. Natural joins should be included only when their implicit column-matching behavior is appropriate; explicit joins are generally easier to maintain.
+
+#### 7. Complete API documentation and security
+
+Update:
+
+* `config/settings.py`
+* `config/urls.py`
+* `accounts/serializers.py`
+* `recruitments/serializers.py`
+* `interviews/serializers.py`
+* `ingestion/serializers.py`
+* `ml_engine/serializers.py`
+* Corresponding views, URLs, permissions, and tests.
+
+Implementation scope:
+
+* Swagger/OpenAPI documentation.
+* Login, registration, logout, and token refresh.
+* Candidate CRUD APIs.
+* Batch upload status APIs.
+* Screening result APIs.
+* Interview feedback APIs.
+* ML prediction endpoint.
+* Serializer validation and appropriate HTTP status codes.
+* Role-based authorization and invalid/expired token handling.
+* At least five documented Postman API requests.
+
+Use `ModelSerializer` where appropriate and implement at least one `HyperlinkedModelSerializer` endpoint.
+
+#### 8. Final documentation and deliverables
+
+Generate or update:
+
+* `README.md`
+* `requirements.txt`
+* `.env.example`
+* `sql_queries.sql`
+* `notes.txt`
+* `scripts/run_ingestion.py`
+* `scripts/download_nltk_data.py`
+* Integration and permission tests.
+
+The documentation must include environment setup, migrations, superuser creation, Celery/Redis commands, API testing, model training, model limitations, and known assumptions.
+
+**Phase 2 completion criterion:** A locally runnable, integrated recruitment platform with asynchronous ingestion, ML prediction, NLP resume analysis, a working neural-network prototype, secured APIs, analytics, and documented test procedures.
